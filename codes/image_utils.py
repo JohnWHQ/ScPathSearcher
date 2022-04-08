@@ -47,7 +47,7 @@ def generate_and_store_image(matrix, start, end, trace_set):
 	# paint.tight_layout()
 	# paint.show()	
 
-	filename = "./tmp/" + "{}*{}-{}-".format(len(matrix), len(matrix[0]), str(has_path)) + str(time.time()) + ".png"
+	filename = "../tmp/" + "{}*{}-{}-".format(len(matrix), len(matrix[0]), str(has_path)) + str(time.time()) + ".png"
 
 	paint.savefig(filename)
 

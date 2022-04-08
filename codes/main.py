@@ -104,6 +104,8 @@ if __name__ == '__main__':
 	)
 	print "allSelectedAvg:" + str(cur_total_real_set_avg)
 	print "vPercentAvg:" + str(cur_total_v_percent) 
+
+
 		
 
 
