@@ -2,6 +2,7 @@
 
 import numpy as np
 import time
+import node
 
 
 class DataGenerator:
@@ -16,10 +17,13 @@ class DataGenerator:
 		self.col = m
 		self.height = l
 
+		self.real_set_ponts = set()
+
 		# expect set point counts
 		self.x = x
 
 		self.total = n * m * l
+
 		# build matrix and set selected point with x / row * col * height probability
 		self.matrix, self.real_x = self._init_matrix()
 
@@ -34,74 +38,137 @@ class DataGenerator:
 	def _init_matrix(self):
 
 		matrix = np.zeros((self.row, self.col, self.height))
-		real_x = 0
 
-		for i in range(self.row):
-			for j in range(self.col):
-				for k in range(self.height):
-					# equiprobability generate rand from 1 ~ total 
-					cur_rand = np.random.randint(self.total) + 1
+		for i in range(self.x):
+			rand_x = np.random.randint(self.row)
+			rand_y = np.random.randint(self.col)
+			rand_z = np.random.randint(self.height)
+			matrix[rand_x][rand_y][rand_z] = DataGenerator._selected
+			self.real_set_ponts.add(node.Node(rand_x, rand_y, rand_z))
 
-					# per cell has x / row * col * height equiprobability to set 1 that mean set mid point
-					if cur_rand <= self.x:
-						matrix[i][j][k] = DataGenerator._sp_point
-						real_x = real_x + 1
+		return matrix, len(self.real_set_ponts)
 
-		return matrix, real_x		
+	# def __init_matrix(self):
+	# 	matrix = np.zeros((self.row, self.col, self.height))
+	# 	real_x = 0
+	# 	for i in range(self.row):
+	# 		for j in range(self.col):
+	# 			for k in range(self.height):
+	# 				# equiprobability generate rand from 1 ~ total 
+	# 				cur_rand = np.random.randint(self.total) + 1
+
+	# 				# per cell has x / row * col * height equiprobability to set 1 that mean set mid point
+	# 				if cur_rand <= self.x:
+	# 					matrix[i][j][k] = DataGenerator._sp_point
+	# 					real_x = real_x + 1
+
+	# 	return matrix, real_x		
 
 	def _generate_rule_shape_by_probability(self):
 
-		for i in range(self.row):
-			for j in range(self.col):
-				for k in range(self.height):
-					if self.matrix[i][j][k] == DataGenerator._sp_point:
-						# equiprobability generate rand from 1 ~ total 
-						cur_rand = np.random.randint(100) + 1
-						direction_rand = np.random.randint(100) + 1
+		for cur_node in self.real_set_ponts:
+			i = cur_node.x
+			j = cur_node.y
+			k = cur_node.z
 
-						# 2% probability to generate 208 (147)
-						if cur_rand >= 1 and cur_rand <= 2:
-							self._generate_uni_shape(i, j, k, 208, 147 ,54, 104, direction_rand)
+			# equiprobability generate rand from 1 ~ total 
+			cur_rand = np.random.randint(100) + 1
+			direction_rand = np.random.randint(100) + 1
 
-						# 3% probability to generate 188 (133)
-						if cur_rand >= 3 and cur_rand <= 5:
-							self._generate_uni_shape(i, j, k, 188, 133 ,48, 94, direction_rand)
+			# 2% probability to generate 208 (147)
+			if cur_rand >= 1 and cur_rand <= 2:
+				self._generate_uni_shape(i, j, k, 208, 147 ,54, 104, direction_rand)
 
-						# 7% probability to generate 146 (103)
-						if cur_rand >= 6 and cur_rand <= 12:
-							self._generate_uni_shape(i, j, k, 146, 103 ,38, 73, direction_rand)
+			# 3% probability to generate 188 (133)
+			if cur_rand >= 3 and cur_rand <= 5:
+				self._generate_uni_shape(i, j, k, 188, 133 ,48, 94, direction_rand)
 
-						# 10% probability to generate 125 (88)
-						if cur_rand >= 13 and cur_rand <= 22:
-							self._generate_uni_shape(i, j, k, 125, 88 ,32, 63, direction_rand)
+			# 7% probability to generate 146 (103)
+			if cur_rand >= 6 and cur_rand <= 12:
+				self._generate_uni_shape(i, j, k, 146, 103 ,38, 73, direction_rand)
 
-						# 16% probability to generate 104 (74)
-						if cur_rand >= 23 and cur_rand <= 38:
-							self._generate_uni_shape(i, j, k, 104, 74 ,27, 52, direction_rand)
+			# 10% probability to generate 125 (88)
+			if cur_rand >= 13 and cur_rand <= 22:
+				self._generate_uni_shape(i, j, k, 125, 88 ,32, 63, direction_rand)
 
-						# 17% probability to generate 63 (45)
-						if cur_rand >= 39 and cur_rand <= 55:
-							self._generate_uni_shape(i, j, k, 64, 45 ,16, 32, direction_rand)
+			# 16% probability to generate 104 (74)
+			if cur_rand >= 23 and cur_rand <= 38:
+				self._generate_uni_shape(i, j, k, 104, 74 ,27, 52, direction_rand)
 
-						# 30% probability to generate 42 (30)
-						if cur_rand >= 56 and cur_rand <= 85:
-							self._generate_uni_shape(i, j, k, 42, 30 ,11, 21, direction_rand)
+			# 17% probability to generate 63 (45)
+			if cur_rand >= 39 and cur_rand <= 55:
+				self._generate_uni_shape(i, j, k, 64, 45 ,16, 32, direction_rand)
 
-						# 15% probability to generate 21 (15)
-						if cur_rand >= 86 and cur_rand <= 100:
-							self._generate_uni_shape(i, j, k, 21, 15 ,5, 11, direction_rand)
+			# 30% probability to generate 42 (30)
+			if cur_rand >= 56 and cur_rand <= 85:
+				self._generate_uni_shape(i, j, k, 42, 30 ,11, 21, direction_rand)
+
+			# 15% probability to generate 21 (15)
+			if cur_rand >= 86 and cur_rand <= 100:
+				self._generate_uni_shape(i, j, k, 21, 15 ,5, 11, direction_rand)
 						
 		res = 0
 
 		for i in range(self.row):
 			for j in range(self.col):
 				for k in range(self.height):
-					if self.matrix[i][j][k] == DataGenerator._sp_point:
-						self.matrix[i][j][k] = DataGenerator._selected
-
 					if self.matrix[i][j][k] == DataGenerator._selected:
 						res = res + 1
 		return res
+
+	# def _generate_rule_shape_by_probability(self):
+
+	# 	for i in range(self.row):
+	# 		for j in range(self.col):
+	# 			for k in range(self.height):
+	# 				if self.matrix[i][j][k] == DataGenerator._sp_point:
+	# 					# equiprobability generate rand from 1 ~ total 
+	# 					cur_rand = np.random.randint(100) + 1
+	# 					direction_rand = np.random.randint(100) + 1
+
+	# 					# 2% probability to generate 208 (147)
+	# 					if cur_rand >= 1 and cur_rand <= 2:
+	# 						self._generate_uni_shape(i, j, k, 208, 147 ,54, 104, direction_rand)
+
+	# 					# 3% probability to generate 188 (133)
+	# 					if cur_rand >= 3 and cur_rand <= 5:
+	# 						self._generate_uni_shape(i, j, k, 188, 133 ,48, 94, direction_rand)
+
+	# 					# 7% probability to generate 146 (103)
+	# 					if cur_rand >= 6 and cur_rand <= 12:
+	# 						self._generate_uni_shape(i, j, k, 146, 103 ,38, 73, direction_rand)
+
+	# 					# 10% probability to generate 125 (88)
+	# 					if cur_rand >= 13 and cur_rand <= 22:
+	# 						self._generate_uni_shape(i, j, k, 125, 88 ,32, 63, direction_rand)
+
+	# 					# 16% probability to generate 104 (74)
+	# 					if cur_rand >= 23 and cur_rand <= 38:
+	# 						self._generate_uni_shape(i, j, k, 104, 74 ,27, 52, direction_rand)
+
+	# 					# 17% probability to generate 63 (45)
+	# 					if cur_rand >= 39 and cur_rand <= 55:
+	# 						self._generate_uni_shape(i, j, k, 64, 45 ,16, 32, direction_rand)
+
+	# 					# 30% probability to generate 42 (30)
+	# 					if cur_rand >= 56 and cur_rand <= 85:
+	# 						self._generate_uni_shape(i, j, k, 42, 30 ,11, 21, direction_rand)
+
+	# 					# 15% probability to generate 21 (15)
+	# 					if cur_rand >= 86 and cur_rand <= 100:
+	# 						self._generate_uni_shape(i, j, k, 21, 15 ,5, 11, direction_rand)
+						
+	# 	res = 0
+
+	# 	for i in range(self.row):
+	# 		for j in range(self.col):
+	# 			for k in range(self.height):
+	# 				if self.matrix[i][j][k] == DataGenerator._sp_point:
+	# 					self.matrix[i][j][k] = DataGenerator._selected
+
+	# 				if self.matrix[i][j][k] == DataGenerator._selected:
+	# 					res = res + 1
+	# 	return res
 
 	def _generate_uni_shape(self, x, y, z, length0, width45, h15, h30, percent_rand):
 		"""
