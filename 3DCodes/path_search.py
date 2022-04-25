@@ -29,25 +29,28 @@ class PathSearcher:
 				timeCost : O(n*m*l)
 				spaceCost: O(n*m*l)
 		"""
+
+		# 记录启发处理过的结点元素
+		trace_set = set()
+
 		for start_node in start_set:
 			# 迭代双端队列 每次处理队首元素将其26邻域结点加入队尾等待处理
 			node_deque = deque()
 			node_deque.append(start_node)
-
-			# 记录处理过的结点元素 (每个进入队列的元素已经作为触发点向终点遍历过算法迭代)
-			trace_set = set()
-			trace_set.add(start_node)
 
 			while len(node_deque) != 0:
 				cur = node_deque.popleft()
 				# find end node map start node
 				if cur in end_set:
 					return True
-
+				# global has been cal
+				if cur in trace_set:
+					continue
 				cx = cur.x
 				cy = cur.y
 				cz = cur.z
 
+				# use 8 seeds to generate 26 seeds neighbor nodes
 				cur_neighbors = []
 				seeds = []
 				# generate 8 seeds neighbor nodes
@@ -60,6 +63,7 @@ class PathSearcher:
 				seeds.append(node.Node(cx, cy - 1, cz))
 				seeds.append(node.Node(cx -1, cy - 1, cz))
 
+				# generate 26 seeds neighbor nodes
 				for cur_seed in seeds:
 					cur_neighbors.append(cur_seed)
 					cur_neighbors.append(node.Node(cur_seed.x, cur_seed.y, cur_seed.z + 1))
@@ -71,7 +75,7 @@ class PathSearcher:
 				for to_node in cur_neighbors:
 					if self.checkValid(matrix, trace_set, to_node):
 						node_deque.append(to_node)
-						trace_set.add(to_node)
+				trace_set.add(cur)
 
 		return False
 
@@ -95,14 +99,14 @@ class PathSearcher:
 
 		# check left and right side, collect connected node to set
 		for i in range(len(matrix)):
-			for j in range(len(matrix[i][0])):
-				if matrix[i][0][j] == 1:
+			for k in range(len(matrix[i][0])):
+				if matrix[i][0][k] == 1:
 					left_quick_check = True
-					start_set.add(node.Node(i, 0, j))
+					start_set.add(node.Node(i, 0, k))
 
-				if matrix[i][len(matrix[i]) - 1][j] == 1:
+				if matrix[i][len(matrix[i]) - 1][k] == 1:
 					right_quick_check = True
-					end_set.add(node.Node(i, len(matrix[i]) - 1, j))
+					end_set.add(node.Node(i, len(matrix[i]) - 1, k))
 
 		# quick check both set
 		if (left_quick_check == False) or (right_quick_check == False):

@@ -1,12 +1,13 @@
 import numpy as np
 
 from path_search import PathSearcher
+from data_generate import DataGenerator
 
 
 def build_matrix(x, y, z, a, b):
 	"""
 	   generate random 0/1 matrix
-	   x * y matrix
+	   x * y * z matrix
 	   a/b percent random set 1
 	"""
 	matrix = np.zeros((x, y, z))
@@ -22,6 +23,10 @@ def build_matrix(x, y, z, a, b):
 
 if __name__ == '__main__':
 	
-	matrix = build_matrix(500, 500, 100, 10, 100)
-	searcher = PathSearcher(matrix)
+	# matrix = build_matrix(500, 500, 200, 1, 1000)
+	# searcher = PathSearcher(matrix)
+	# searcher.run()
+
+	data = DataGenerator(500, 500, 200, 300)
+	searcher = PathSearcher(data.matrix)
 	searcher.run()
