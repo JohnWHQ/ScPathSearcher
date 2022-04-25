@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 from path_search import PathSearcher
 from data_generate import DataGenerator
@@ -10,7 +11,9 @@ def build_matrix(x, y, z, a, b):
 	   x * y * z matrix
 	   a/b percent random set 1
 	"""
+	start_time = time.time()
 	matrix = np.zeros((x, y, z))
+	print str(end_time - start_time)
 
 	for i in range(x):
 		for j in range(y):
@@ -18,6 +21,8 @@ def build_matrix(x, y, z, a, b):
 				cur_rand = np.random.randint(b)
 				if cur_rand <= a:
 					matrix[i][j][k] = 1
+	end_time = time.time()
+	
 	return matrix
 
 
@@ -30,3 +35,5 @@ if __name__ == '__main__':
 	data = DataGenerator(500, 500, 200, 50000)
 	searcher = PathSearcher(data.matrix)
 	searcher.run()
+	
+	
