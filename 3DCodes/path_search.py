@@ -119,7 +119,7 @@ class PathSearcher:
 		res = self.bfs_path_search(start_set, end_set, matrix, generate_image=generate_image)
 
 		end_time = time.time()
-		print "res:{} \ncost seconds: {}".format(str(res), str(end_time - start_time))
+		print "res:{} \ncalcul cost seconds: {}".format(str(res), str(end_time - start_time))
 
 		return res
 
