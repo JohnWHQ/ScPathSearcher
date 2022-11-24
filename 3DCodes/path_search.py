@@ -94,22 +94,22 @@ class PathSearcher:
 		start_set = set()
 		end_set = set()
 
-		left_quick_check = False
-		right_quick_check = False
+		back_quick_check = False
+		front_quick_check = False
 
-		# check left and right side, collect connected node to set
-		for i in range(len(matrix)):
-			for k in range(len(matrix[i][0])):
-				if matrix[i][0][k] == 1:
-					left_quick_check = True
-					start_set.add(node.Node(i, 0, k))
+		# check back and front side, collect connected node to set
+		for j in range(len(matrix[0])):
+			for k in range(len(matrix[0][j])):
+				if matrix[0][j][k] == 1:
+					back_quick_check = True
+					start_set.add(node.Node(0, j, k))
 
-				if matrix[i][len(matrix[i]) - 1][k] == 1:
-					right_quick_check = True
-					end_set.add(node.Node(i, len(matrix[i]) - 1, k))
+				if matrix[len(matrix) - 1][j][k] == 1:
+					front_quick_check = True
+					end_set.add(node.Node(len(matrix) - 1, j, k))
 
 		# quick check both set
-		if (left_quick_check == False) or (right_quick_check == False):
+		if (back_quick_check == False) or (front_quick_check == False):
 			print "quick check search has no path, codes over..."
 			return False
 

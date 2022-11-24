@@ -12,7 +12,7 @@ class Node:
         return "({}, {}, {})".format(self.x, self.y, self.z)
 
     def __hash__(self):
-        return hash("{}_{}".format(self.x, self.y, self.z))
+        return hash("{}_{}_{}".format(self.x, self.y, self.z))
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
