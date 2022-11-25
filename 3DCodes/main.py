@@ -32,7 +32,7 @@ if __name__ == '__main__':
 	# searcher = PathSearcher(matrix)
 	# searcher.run()
 
-	data = DataGenerator(500, 500, 200, 500000)
+	data = DataGenerator(500, 500, 140, 25000)
 	searcher = PathSearcher(data.matrix)
 	searcher.run()
 
