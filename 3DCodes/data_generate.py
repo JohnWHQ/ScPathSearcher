@@ -3,6 +3,7 @@
 import numpy as np
 import time
 import node
+import random as real_rand
 
 
 class DataGenerator:
@@ -49,7 +50,8 @@ class DataGenerator:
 			for j in range(self.col):
 				for k in range(self.height):
 					# equiprobability generate rand from 1 ~ total 
-					cur_rand = np.random.randint(self.total) + 1
+					# cur_rand = np.random.randint(self.total) + 1
+					cur_rand = real_rand.randint(1, self.total)
 					if cur_rand <= self.x:
 						matrix[i][j][k] = DataGenerator._selected
 						self.real_set_ponts.add(node.Node(i, j, k))
@@ -65,7 +67,8 @@ class DataGenerator:
 			k = cur_node.z
 
 			# equiprobability generate rand from 1 ~ total 
-			cur_rand = np.random.randint(100) + 1
+			# cur_rand = np.random.randint(100) + 1
+			cur_rand = real_rand.randint(1, 100)
 
 			# 2% probability to generate 208 (147)
 			if cur_rand >= 1 and cur_rand <= 2:
